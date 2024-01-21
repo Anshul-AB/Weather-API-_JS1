@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="index.css" />
+  <!-- Poppins google font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,500&display=swap"
+    rel="stylesheet" />
+  <title>Weather App</title>
+</head>
+
+<body>
+  <div class="main">
+    <!-- Search -->
+    <div class="search">
+      <input type="text" name="search" id="search" placeholder="ENTER CITY NAME" spellcheck="false" />
+      <button>
+        <iconify-icon icon="material-symbols:search"></iconify-icon>
+      </button>
+    </div>
+
+    <!-- weather -->
+    <div class="weather">
+      <div class="icon">
+        <iconify-icon icon="meteocons:clear-day-fill" width="130px" height="130px"></iconify-icon>
+      </div>
+      <h2 class="temp">22&deg;</h2>
+      <h1 class="city">New York</h1>
+    </div>
+
+    <!-- details -->
+    <div class="details">
+      <div class="detailsFlex">
+
+        <div class="humid">
+          <iconify-icon icon="meteocons:humidity-fill" width="100px" height="100px"></iconify-icon>
+          <div>
+            <h2 class="humidityPercentage">%age</h2>
+            <h4>Humidity</h4>
+          </div>
+        </div>
+        <div class="wind">
+          <iconify-icon icon="meteocons:windsock" width="100px" height="100px"></iconify-icon>
+          <div>
+            <h2 class="windSpeed">km/hr</h2>
+            <h4>Wind Speed</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Script -->
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+  <script>
+
+    const apiKey = "ed3ebc0c69d0dff94679a93833a7c018";
+    const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    const searchBox = document.querySelector(".search input");
+    const searchBtn = document.querySelector(".search button");
+    const weatherIcon = document.querySelector(".icon");
+
+
+    async function checkWeather(city) {
+      const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+      var data = await response.json();
+
+      document.querySelector(".city").innerHTML = data.name;
+      document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+      document.querySelector(".humidityPercentage").innerHTML = data.main.humidity + "%";
+      document.querySelector(".windSpeed").innerHTML = data.wind.speed + "Km/h";
+
+      // change weather icons
+      // change weather icons
+      if (data.weather[0].main == "Clouds") {
+        weatherIcon.innerHTML = '<iconify-icon icon="meteocons:partly-cloudy-day-fill" width="130px" height="130px"></iconify-icon>';
+      } else if (data.weather[0].main == "Clear") {
+        weatherIcon.innerHTML = '<iconify-icon icon="meteocons:clear-day-fill" width="130px" height="130px" ></iconify-icon>';
+      } else if (data.weather[0].main == "Rain") {
+        weatherIcon.innerHTML = '<iconify-icon icon="meteocons:extreme-rain" width="130px" height="130px"></iconify-icon>';
+      } else if (data.weather[0].main == "Drizzle") {
+        weatherIcon.innerHTML = '<iconify-icon icon="meteocons:raindrops-fill" width="130px" height="130px"></iconify-icon>';
+      } else if (data.weather[0].main == "Mist") {
+        weatherIcon.innerHTML = '<iconify-icon icon="meteocons:mist-fill" width="130px" height="130px"></iconify-icon>';
+      }
+
+      document.querySelector(".weather").style.display = "block";
+      document.querySelector(".details").style.display = "block";
+
+
+    }
+    searchBtn.addEventListener("click", () => {
+      checkWeather(searchBox.value);
+    })
+
+  </script>
+</body>
+
+</html>
